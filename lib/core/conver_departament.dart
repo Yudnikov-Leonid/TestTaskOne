@@ -1,12 +1,12 @@
 class ConvertDepartment {
-  static String convert(String department) {
+  static String department(String department) {
     switch (department) {
       case 'android':
         return 'Android';
       case 'ios':
         return 'IOS';
       case 'design':
-        return 'Design';
+        return 'Designer';
       case 'management':
         return 'Management';
       case 'qa':
