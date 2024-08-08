@@ -28,4 +28,36 @@ class ConvertDepartment {
     }
     return '';
   }
+
+  static String categoryToDepartment(String category) {
+    switch (category) {
+      case 'Designers':
+        return 'design';
+      case 'Analytics':
+        return 'analytics';
+      case 'Managers':
+        return 'management';
+      case 'IOS':
+        return 'ios';
+      case 'Android':
+        return 'android';
+      case 'Frontend':
+        return 'frontend';
+      case 'Backend':
+        return 'backend';
+      case 'Management':
+        return 'management';
+      case 'QA':
+        return 'qa';
+      case 'HR':
+        return 'hr';
+      case 'PR':
+        return 'pr';
+      case 'Back-office':
+        return 'back_office';
+      case 'support':
+        return 'support';
+    }
+    return '';
+  }
 }

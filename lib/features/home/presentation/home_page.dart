@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/presentation/home_bloc.dart';
 import 'package:test_task_one/features/home/presentation/person_widget.dart';
@@ -67,7 +68,18 @@ class HomePage extends StatelessWidget {
                                       PersonWidget(person: state.persons[i])),
                             )
                           ] +
-                          _pages.sublist(1).map((e) => Text(e)).toList());
+                          _pages.sublist(1).map((cat) {
+                            final newList = state.persons
+                                    .where((per) =>
+                                        per.department ==
+                                        ConvertDepartment.categoryToDepartment(
+                                            cat)).toList();
+                            return ListView.builder(
+                                itemCount: 
+                                    newList.length,
+                                itemBuilder: (context, i) =>
+                                    PersonWidget(person: newList[i]));
+                          }).toList());
                 } else {
                   throw Exception('unknown home state: $state');
                 }
