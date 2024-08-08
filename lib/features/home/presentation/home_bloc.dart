@@ -28,7 +28,7 @@ abstract class HomeState {}
 class HomeLoadingState extends HomeState {}
 
 class HomeLoadedState extends HomeState {
-  final List<UserPersons> persons;
+  final List<PersonEntity> persons;
   HomeLoadedState(this.persons);
 }
 

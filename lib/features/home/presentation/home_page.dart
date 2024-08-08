@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/presentation/home_bloc.dart';
+import 'package:test_task_one/features/home/presentation/person_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -31,9 +32,8 @@ class HomePage extends StatelessWidget {
               } else if (state is HomeLoadedState) {
                 return ListView.builder(
                     itemCount: state.persons.length,
-                    itemBuilder: (context, i) => ListTile(
-                          title: Text(state.persons[i].firstName),
-                        ));
+                    itemBuilder: (context, i) =>
+                        PersonWidget(person: state.persons[i]));
               } else {
                 throw Exception('unknown home state: $state');
               }
