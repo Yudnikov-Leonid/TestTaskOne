@@ -5,7 +5,24 @@ import 'package:test_task_one/features/home/presentation/home_bloc.dart';
 import 'package:test_task_one/features/home/presentation/person_widget.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final _pages = [
+    'All',
+    'Designers',
+    'Analytics',
+    'Managers',
+    'IOS',
+    'Android',
+    'Frontend',
+    'Backend',
+    'Management',
+    'QA',
+    'HR',
+    'PR',
+    'Back-office',
+    'support'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -20,24 +37,42 @@ class HomePage extends StatelessWidget {
             ),
           );
         } else {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('app bar'),
+          return DefaultTabController(
+            length: 14,
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text('app bar'),
+                bottom: TabBar(
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    tabs: _pages
+                        .map((e) => Tab(
+                              text: e,
+                            ))
+                        .toList()),
+              ),
+              body: Builder(builder: (context) {
+                if (state is HomeLoadingState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is HomeLoadedState) {
+                  return TabBarView(
+                      children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: ListView.builder(
+                                  itemCount: state.persons.length,
+                                  itemBuilder: (context, i) =>
+                                      PersonWidget(person: state.persons[i])),
+                            )
+                          ] +
+                          _pages.sublist(1).map((e) => Text(e)).toList());
+                } else {
+                  throw Exception('unknown home state: $state');
+                }
+              }),
             ),
-            body: Builder(builder: (context) {
-              if (state is HomeLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is HomeLoadedState) {
-                return ListView.builder(
-                    itemCount: state.persons.length,
-                    itemBuilder: (context, i) =>
-                        PersonWidget(person: state.persons[i]));
-              } else {
-                throw Exception('unknown home state: $state');
-              }
-            }),
           );
         }
       }),
