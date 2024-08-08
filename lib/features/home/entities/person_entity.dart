@@ -1,4 +1,4 @@
-class UserEntity {
+class UserPersons {
   final String id;
   final String avatarUrl;
   final String firstName;
@@ -9,7 +9,7 @@ class UserEntity {
   final String birthday;
   final String phone;
 
-  UserEntity(
+  UserPersons(
       {required this.id,
       required this.avatarUrl,
       required this.firstName,
@@ -20,8 +20,8 @@ class UserEntity {
       required this.birthday,
       required this.phone});
 
-  factory UserEntity.fromJson(Map<String, dynamic> json) {
-    return UserEntity(
+  factory UserPersons.fromJson(Map<String, dynamic> json) {
+    return UserPersons(
         id: json['id'],
         avatarUrl: json['avatarUrl'],
         firstName: json['firstName'],

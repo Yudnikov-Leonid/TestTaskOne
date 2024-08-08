@@ -30,9 +30,9 @@ class HomePage extends StatelessWidget {
                 );
               } else if (state is HomeLoadedState) {
                 return ListView.builder(
-                    itemCount: state.users.length,
+                    itemCount: state.persons.length,
                     itemBuilder: (context, i) => ListTile(
-                          title: Text(state.users[i].firstName),
+                          title: Text(state.persons[i].firstName),
                         ));
               } else {
                 throw Exception('unknown home state: $state');
