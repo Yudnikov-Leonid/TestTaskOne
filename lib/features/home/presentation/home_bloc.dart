@@ -1,13 +1,19 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/entities/user_entity.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeLoadingState()) {
+  final HomeRepository _repository;
+
+  HomeBloc({required HomeRepository repository})
+      : _repository = repository,
+        super(HomeLoadingState()) {
     on<HomeInitialEvent>(_onInitial);
   }
 
   void _onInitial(HomeInitialEvent event, Emitter<HomeState> emit) async {
-
+    final users = await _repository.getUsers();
+    emit(HomeLoadedState(users));
   }
 }
 
