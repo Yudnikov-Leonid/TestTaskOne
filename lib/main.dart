@@ -15,7 +15,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: HomePage());
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MediaQuery.withClampedTextScaling(
+        minScaleFactor: 0.8,
+        maxScaleFactor: 1.2,
+        child: const HomePage(),
+      ),
+    );
   }
 }
