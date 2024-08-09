@@ -26,7 +26,7 @@ class SortByBirthday extends SortType {
   @override
   List<PersonEntity> sort(List<PersonEntity> list) {
     final newList = List<PersonEntity>.from(list);
-    newList.sort((a, b) => a.birthday.compareTo(b.birthday));
+    newList.sort((a, b) => b.birthday.compareTo(a.birthday));
     return newList;
   }
   

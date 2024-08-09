@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
+import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
 import 'package:test_task_one/features/home/presentation/widgets/search_widget.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
@@ -106,8 +107,11 @@ class _HomePageState extends State<HomePage> {
                                 ? const EmptyListWidget()
                                 : ListView.builder(
                                     itemCount: searchedList.length,
-                                    itemBuilder: (context, i) =>
-                                        PersonWidget(person: searchedList[i]))
+                                    itemBuilder: (context, i) => PersonWidget(
+                                          person: searchedList[i],
+                                          showBirthday:
+                                              state.sortType is SortByBirthday,
+                                        ))
                           ] +
                           _pages.sublist(1).map((cat) {
                             final newList = searchedList
@@ -120,8 +124,11 @@ class _HomePageState extends State<HomePage> {
                             }
                             return ListView.builder(
                                 itemCount: newList.length,
-                                itemBuilder: (context, i) =>
-                                    PersonWidget(person: newList[i]));
+                                itemBuilder: (context, i) => PersonWidget(
+                                      person: newList[i],
+                                      showBirthday:
+                                          state.sortType is SortByBirthday,
+                                    ));
                           }).toList());
                 } else {
                   throw Exception('unknown home state: $state');

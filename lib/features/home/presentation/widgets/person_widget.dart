@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/details/details_page.dart';
 import 'package:test_task_one/features/home/entities/person_entity.dart';
 
 class PersonWidget extends StatelessWidget {
-  const PersonWidget({required this.person, super.key});
+  const PersonWidget(
+      {required this.person, required this.showBirthday, super.key});
 
   final PersonEntity person;
+  final bool showBirthday;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +57,16 @@ class PersonWidget extends StatelessWidget {
                 ),
                 Text(ConvertDepartment.department(person.department))
               ],
+            ),
+            const Expanded(child: SizedBox()),
+            if (showBirthday)
+              Text(
+                DateFormat('dd MMM')
+                    .format(DateFormat('yyyy-MM-dd').parse(person.birthday)),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+              ),
+            const SizedBox(
+              width: 10,
             )
           ],
         ),
