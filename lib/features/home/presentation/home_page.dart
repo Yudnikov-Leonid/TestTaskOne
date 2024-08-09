@@ -6,9 +6,14 @@ import 'package:test_task_one/features/home/presentation/home_search_widget.dart
 import 'package:test_task_one/features/home/presentation/home_bloc.dart';
 import 'package:test_task_one/features/home/presentation/person_widget.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final _pages = [
     'All',
     'Designers',
@@ -25,6 +30,24 @@ class HomePage extends StatelessWidget {
     'Back-office',
     'Support'
   ];
+  final TextEditingController _controller = TextEditingController();
+  String _searchText = '';
+
+  @override
+  void initState() {
+    _controller.addListener(() {
+      setState(() {
+        _searchText = _controller.text;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +66,9 @@ class HomePage extends StatelessWidget {
             length: 14,
             child: Scaffold(
               appBar: AppBar(
-                title: const HomeSearchWidget(),
+                title: HomeSearchWidget(
+                  controller: _controller,
+                ),
                 bottom: TabBar(
                     isScrollable: true,
                     tabAlignment: TabAlignment.start,
@@ -59,22 +84,28 @@ class HomePage extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is HomeLoadedState) {
+                  final searchText = _searchText.toLowerCase();
+                  final searchedList = state.persons
+                      .where((e) =>
+                          '${e.firstName} ${e.lastName}'.toLowerCase()
+                              .startsWith(searchText) ||
+                          e.userTag.toLowerCase().startsWith(searchText))
+                      .toList();
                   return TabBarView(
                       children: <Widget>[
                             ListView.builder(
-                                itemCount: state.persons.length,
+                                itemCount: searchedList.length,
                                 itemBuilder: (context, i) =>
-                                    PersonWidget(person: state.persons[i]))
+                                    PersonWidget(person: searchedList[i]))
                           ] +
                           _pages.sublist(1).map((cat) {
-                            final newList = state.persons
-                                    .where((per) =>
-                                        per.department ==
-                                        ConvertDepartment.categoryToDepartment(
-                                            cat)).toList();
+                            final newList = searchedList
+                                .where((per) =>
+                                    per.department ==
+                                    ConvertDepartment.categoryToDepartment(cat))
+                                .toList();
                             return ListView.builder(
-                                itemCount: 
-                                    newList.length,
+                                itemCount: newList.length,
                                 itemBuilder: (context, i) =>
                                     PersonWidget(person: newList[i]));
                           }).toList());
