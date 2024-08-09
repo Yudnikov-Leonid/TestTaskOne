@@ -55,7 +55,7 @@ class ConvertDepartment {
         return 'pr';
       case 'Back-office':
         return 'back_office';
-      case 'support':
+      case 'Support':
         return 'support';
     }
     return '';
