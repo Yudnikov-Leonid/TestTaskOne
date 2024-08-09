@@ -1,13 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_task_one/core/handle_error.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/entities/person_entity.dart';
 import 'package:test_task_one/features/home/entities/sort_type.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository _repository;
+  final HandleError _handleError;
 
-  HomeBloc({required HomeRepository repository})
+  HomeBloc(
+      {required HomeRepository repository, required HandleError handleError})
       : _repository = repository,
+        _handleError = handleError,
         super(HomeLoadingState()) {
     on<HomeInitialEvent>(_onInitial);
     on<HomeChangeSortTypeEvent>(_onChangeSortType);
@@ -21,7 +25,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final sortType = SortByAlphabet();
       emit(HomeLoadedState(sortType.sort(persons), sortType));
     } catch (e) {
-      emit(HomeFailedState(e.toString()));
+      emit(HomeFailedState(_handleError(e)));
     }
   }
 
@@ -31,7 +35,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final persons = _repository.getCachedPersons();
       emit(HomeLoadedState(event.newType.sort(persons), event.newType));
     } catch (e) {
-      emit(HomeFailedState(e.toString()));
+      emit(HomeFailedState(_handleError(e)));
     }
   }
 
@@ -41,7 +45,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final sortType = SortByAlphabet();
       emit(HomeLoadedState(sortType.sort(persons), sortType));
     } catch (e) {
-      emit(HomeFailedState(e.toString()));
+      emit(HomeFailedState(_handleError(e)));
     }
   }
 }

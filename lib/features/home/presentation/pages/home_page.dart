@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task_one/core/conver_departament.dart';
+import 'package:test_task_one/core/handle_error.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _bloc = HomeBloc(repository: HomeRepository());
+    _bloc = HomeBloc(repository: HomeRepository(), handleError: HandleError());
     _bloc.add(HomeInitialEvent());
     _controller.addListener(() {
       setState(() {
