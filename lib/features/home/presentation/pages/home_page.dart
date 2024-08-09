@@ -4,6 +4,7 @@ import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
+import 'package:test_task_one/features/home/presentation/widgets/home_skeleton_loading.dart';
 import 'package:test_task_one/features/home/presentation/widgets/search_widget.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
 import 'package:test_task_one/features/home/presentation/widgets/person_widget.dart';
@@ -72,6 +73,7 @@ class _HomePageState extends State<HomePage> {
             child: Scaffold(
               appBar: AppBar(
                 title: SearchWidget(
+                  isLoading: state is HomeLoadingState,
                   controller: _controller,
                   sortType: state is HomeLoadedState
                       ? state.sortType
@@ -92,9 +94,7 @@ class _HomePageState extends State<HomePage> {
               ),
               body: Builder(builder: (context) {
                 if (state is HomeLoadingState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const HomeSkeletonLoading();
                 } else if (state is HomeLoadedState) {
                   final searchText = _searchText.toLowerCase();
                   final searchedList = state.persons

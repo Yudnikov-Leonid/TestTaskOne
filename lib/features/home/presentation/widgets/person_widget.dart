@@ -26,10 +26,16 @@ class PersonWidget extends StatelessWidget {
               width: 16,
             ),
             ClipOval(
-                child: Image.network(
-              person.avatarUrl,
-              height: 75,
-            )),
+                child: person.avatarUrl.isNotEmpty
+                    ? Image.network(
+                        person.avatarUrl,
+                        height: 75,
+                      )
+                    : Container(
+                        color: Colors.grey,
+                        height: 75,
+                        width: 75,
+                      )),
             const SizedBox(
               width: 20,
             ),

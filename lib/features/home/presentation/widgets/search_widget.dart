@@ -8,11 +8,13 @@ class SearchWidget extends StatefulWidget {
       {required this.controller,
       required this.sortType,
       required this.sortBottomSheet,
+      required this.isLoading,
       super.key});
 
   final TextEditingController controller;
   final SortType sortType;
   final SortBottomSheet sortBottomSheet;
+  final bool isLoading;
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -57,6 +59,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                             _editing = true;
                           });
                         },
+                        enabled: !widget.isLoading,
                         controller: widget.controller,
                         decoration: const InputDecoration(
                           hintText: 'Input name, tag...',
@@ -70,6 +73,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                         scaleX: -1,
                         child: IconButton(
                             onPressed: () {
+                              if (widget.isLoading) return;
                               showModalBottomSheet(
                                   context: context,
                                   builder: (context) => widget.sortBottomSheet);
