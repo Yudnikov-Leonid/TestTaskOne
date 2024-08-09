@@ -17,6 +17,7 @@ class PersonWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: InkWell(
         onTap: () {
+          WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => DetailsPage(person: person)));
         },
