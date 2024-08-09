@@ -4,6 +4,7 @@ import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
+import 'package:test_task_one/features/home/presentation/widgets/failure_widget.dart';
 import 'package:test_task_one/features/home/presentation/widgets/home_skeleton_loading.dart';
 import 'package:test_task_one/features/home/presentation/widgets/search_widget.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
@@ -63,10 +64,10 @@ class _HomePageState extends State<HomePage> {
       child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         if (state is HomeFailedState) {
           return Scaffold(
-            body: Center(
-              child: Text('Error: ${state.message}'),
-            ),
-          );
+              body: FailureWidget(
+            state.message,
+            bloc: _bloc,
+          ));
         } else {
           return DefaultTabController(
             length: 14,

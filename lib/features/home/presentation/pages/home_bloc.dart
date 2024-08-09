@@ -11,13 +11,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         super(HomeLoadingState()) {
     on<HomeInitialEvent>(_onInitial);
     on<HomeChangeSortTypeEvent>(_onChangeSortType);
+    on<HomeRefreshEvent>(_onRefreshEvent);
+  }
+
+  void _onRefreshEvent(HomeRefreshEvent event, Emitter<HomeState> emit) async {
+    emit(HomeLoadingState());
+    try {
+      final persons = await _repository.getPersons();
+      final sortType = SortByAlphabet();
+      emit(HomeLoadedState(sortType.sort(persons), sortType));
+    } catch (e) {
+      emit(HomeFailedState(e.toString()));
+    }
   }
 
   void _onChangeSortType(
       HomeChangeSortTypeEvent event, Emitter<HomeState> emit) async {
     try {
       final persons = _repository.getCachedPersons();
-      print('new type: ${event.newType}');
       emit(HomeLoadedState(event.newType.sort(persons), event.newType));
     } catch (e) {
       emit(HomeFailedState(e.toString()));
@@ -27,9 +38,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _onInitial(HomeInitialEvent event, Emitter<HomeState> emit) async {
     try {
       final persons = await _repository.getPersons();
-      persons.sort((a, b) => '${a.firstName} ${a.lastName}'
-          .compareTo('${b.firstName} ${b.lastName}'));
-      emit(HomeLoadedState(persons, SortByAlphabet()));
+      final sortType = SortByAlphabet();
+      emit(HomeLoadedState(sortType.sort(persons), sortType));
     } catch (e) {
       emit(HomeFailedState(e.toString()));
     }
@@ -45,6 +55,8 @@ class HomeChangeSortTypeEvent extends HomeEvent {
   final SortType newType;
   HomeChangeSortTypeEvent(this.newType);
 }
+
+class HomeRefreshEvent extends HomeEvent {}
 
 //states
 abstract class HomeState {}
