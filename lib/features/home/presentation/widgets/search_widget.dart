@@ -43,9 +43,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                     const SizedBox(
                       width: 10,
                     ),
-                    const Icon(
+                    Icon(
                       Icons.search,
-                      color: Colors.grey,
+                      color: _editing ? Colors.black : Colors.grey,
                     ),
                     const SizedBox(
                       width: 10,
