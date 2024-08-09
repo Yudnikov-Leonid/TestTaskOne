@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:test_task_one/features/home/presentation/widgets/sort_bottom_sheet.dart';
 
-class HomeSearchWidget extends StatefulWidget {
-  const HomeSearchWidget({required this.controller, super.key});
+class SearchWidget extends StatefulWidget {
+  const SearchWidget({required this.controller, super.key});
 
   final TextEditingController controller;
 
   @override
-  State<HomeSearchWidget> createState() => _HomeSearchWidgetState();
+  State<SearchWidget> createState() => _SearchWidgetState();
 }
 
-class _HomeSearchWidgetState extends State<HomeSearchWidget> {
+class _SearchWidgetState extends State<SearchWidget> {
   bool _editing = false;
 
   @override
@@ -64,7 +65,11 @@ class _HomeSearchWidgetState extends State<HomeSearchWidget> {
                       Transform.scale(
                         scaleX: -1,
                         child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => const SortBottomSheet());
+                            },
                             icon: const Icon(
                               Icons.sort,
                               color: Colors.grey,

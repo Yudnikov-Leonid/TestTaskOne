@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
 import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
-import 'package:test_task_one/features/home/presentation/widgets/home_search_widget.dart';
+import 'package:test_task_one/features/home/presentation/widgets/search_widget.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
 import 'package:test_task_one/features/home/presentation/widgets/person_widget.dart';
 
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             length: 14,
             child: Scaffold(
               appBar: AppBar(
-                title: HomeSearchWidget(
+                title: SearchWidget(
                   controller: _controller,
                 ),
                 bottom: TabBar(
