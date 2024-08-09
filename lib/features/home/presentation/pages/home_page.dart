@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/core/handle_error.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
+import 'package:test_task_one/features/home/entities/person_entity.dart';
 import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
 import 'package:test_task_one/features/home/presentation/widgets/failure_widget.dart';
@@ -39,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String _searchText = '';
   late HomeBloc _bloc;
+  Completer<bool>? _refreshingCompleter;
 
   @override
   void initState() {
@@ -98,6 +102,10 @@ class _HomePageState extends State<HomePage> {
                 if (state is HomeLoadingState) {
                   return const HomeSkeletonLoading();
                 } else if (state is HomeLoadedState) {
+                  if (_refreshingCompleter != null &&
+                      !_refreshingCompleter!.isCompleted) {
+                    _refreshingCompleter!.complete(true);
+                  }
                   final searchText = _searchText.toLowerCase();
                   final searchedList = state.persons
                       .where((e) =>
@@ -110,13 +118,8 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                             searchedList.isEmpty
                                 ? const EmptyListWidget()
-                                : ListView.builder(
-                                    itemCount: searchedList.length,
-                                    itemBuilder: (context, i) => PersonWidget(
-                                          person: searchedList[i],
-                                          showBirthday:
-                                              state.sortType is SortByBirthday,
-                                        ))
+                                : _listView(searchedList,
+                                    state.sortType is SortByBirthday)
                           ] +
                           _pages.sublist(1).map((cat) {
                             final newList = searchedList
@@ -127,13 +130,8 @@ class _HomePageState extends State<HomePage> {
                             if (newList.isEmpty) {
                               return const EmptyListWidget();
                             }
-                            return ListView.builder(
-                                itemCount: newList.length,
-                                itemBuilder: (context, i) => PersonWidget(
-                                      person: newList[i],
-                                      showBirthday:
-                                          state.sortType is SortByBirthday,
-                                    ));
+                            return _listView(
+                                newList, state.sortType is SortByBirthday);
                           }).toList());
                 } else {
                   throw Exception('unknown home state: $state');
@@ -143,6 +141,22 @@ class _HomePageState extends State<HomePage> {
           );
         }
       }),
+    );
+  }
+
+  Widget _listView(List<PersonEntity> items, bool showBirthday) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        _bloc.add(HomeRefreshEvent(showLoading: false));
+        _refreshingCompleter = Completer();
+        await _refreshingCompleter!.future;
+      },
+      child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, i) => PersonWidget(
+                person: items[i],
+                showBirthday: showBirthday,
+              )),
     );
   }
 }

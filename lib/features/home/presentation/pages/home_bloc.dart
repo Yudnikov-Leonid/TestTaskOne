@@ -19,7 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _onRefreshEvent(HomeRefreshEvent event, Emitter<HomeState> emit) async {
-    emit(HomeLoadingState());
+    if (event.showLoading) emit(HomeLoadingState());
     try {
       final persons = await _repository.getPersons();
       final sortType = SortByAlphabet();
@@ -60,7 +60,10 @@ class HomeChangeSortTypeEvent extends HomeEvent {
   HomeChangeSortTypeEvent(this.newType);
 }
 
-class HomeRefreshEvent extends HomeEvent {}
+class HomeRefreshEvent extends HomeEvent {
+  final bool showLoading;
+  HomeRefreshEvent({required this.showLoading});
+}
 
 //states
 abstract class HomeState {}

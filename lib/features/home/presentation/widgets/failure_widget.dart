@@ -28,7 +28,7 @@ class FailureWidget extends StatelessWidget {
           ),
           TextButton(
               onPressed: () {
-                bloc.add(HomeRefreshEvent());
+                bloc.add(HomeRefreshEvent(showLoading: true));
               },
               child: const Text(
                 'Retry',
