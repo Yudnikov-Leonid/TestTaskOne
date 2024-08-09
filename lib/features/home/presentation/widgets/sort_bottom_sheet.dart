@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:test_task_one/features/home/entities/sort_type.dart';
+import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
 
-class SortBottomSheet extends StatelessWidget {
-  const SortBottomSheet({super.key});
+class SortBottomSheet extends StatefulWidget {
+  const SortBottomSheet({required this.bloc, required this.index, super.key});
+
+  final HomeBloc bloc;
+  final int index;
+
+  @override
+  State<SortBottomSheet> createState() => _SortBottomSheetState();
+}
+
+class _SortBottomSheetState extends State<SortBottomSheet> {
+  int _index = 0;
+
+  @override
+  void initState() {
+    _index = widget.index;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +48,11 @@ class SortBottomSheet extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          _element('By alphabet', true),
+          _element(SortByAlphabet(), 0),
           const SizedBox(
             height: 10,
           ),
-          _element('By birthday', false),
+          _element(SortByBirthday(), 1),
           const SizedBox(
             height: 30,
           )
@@ -43,30 +61,38 @@ class SortBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _element(String text, bool isSelected) {
-    return Row(
-      children: [
-        const SizedBox(
-          width: 16,
-        ),
-        Container(
-          height: 30,
-          width: 30,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                  color: const Color.fromARGB(255, 101, 52, 255),
-                  width: isSelected ? 10 : 3),
-              shape: BoxShape.circle),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-        )
-      ],
+  Widget _element(SortType type, int index) {
+    return InkWell(
+      onTap: () {
+        widget.bloc.add(HomeChangeSortTypeEvent(type));
+        setState(() {
+          _index = index;
+        });
+      },
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 16,
+          ),
+          Container(
+            height: 30,
+            width: 30,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                    color: const Color.fromARGB(255, 101, 52, 255),
+                    width: _index == index ? 10 : 3),
+                shape: BoxShape.circle),
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Text(
+            type.name,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          )
+        ],
+      ),
     );
   }
 }

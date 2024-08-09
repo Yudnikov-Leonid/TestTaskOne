@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:test_task_one/features/home/presentation/widgets/sort_bottom_sheet.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({required this.controller, super.key});
+  const SearchWidget({required this.controller, required this.sortBottomSheet, super.key});
 
   final TextEditingController controller;
+  final SortBottomSheet sortBottomSheet;
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -49,10 +50,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                             _editing = true;
                           });
                         },
-                        onEditingComplete: () {
-                          print('onEditingComplete');
-                          FocusScope.of(context).unfocus();
-                        },
                         controller: widget.controller,
                         decoration: const InputDecoration(
                           hintText: 'Input name, tag...',
@@ -68,7 +65,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                             onPressed: () {
                               showModalBottomSheet(
                                   context: context,
-                                  builder: (context) => const SortBottomSheet());
+                                  builder: (context) => widget.sortBottomSheet);
                             },
                             icon: const Icon(
                               Icons.sort,

@@ -6,6 +6,7 @@ import 'package:test_task_one/features/home/presentation/widgets/empty_list_widg
 import 'package:test_task_one/features/home/presentation/widgets/search_widget.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
 import 'package:test_task_one/features/home/presentation/widgets/person_widget.dart';
+import 'package:test_task_one/features/home/presentation/widgets/sort_bottom_sheet.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,9 +34,12 @@ class _HomePageState extends State<HomePage> {
   ];
   final TextEditingController _controller = TextEditingController();
   String _searchText = '';
+  late HomeBloc _bloc;
 
   @override
   void initState() {
+    _bloc = HomeBloc(repository: HomeRepository());
+    _bloc.add(HomeInitialEvent());
     _controller.addListener(() {
       setState(() {
         _searchText = _controller.text;
@@ -53,8 +57,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
-      create: (context) =>
-          HomeBloc(repository: HomeRepository())..add(HomeInitialEvent()),
+      create: (context) => _bloc,
       child: BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
         if (state is HomeFailedState) {
           return Scaffold(
@@ -69,6 +72,10 @@ class _HomePageState extends State<HomePage> {
               appBar: AppBar(
                 title: SearchWidget(
                   controller: _controller,
+                  sortBottomSheet: SortBottomSheet(
+                    bloc: _bloc,
+                    index: state is HomeLoadedState ? state.sortType.index : 0,
+                  ),
                 ),
                 bottom: TabBar(
                     isScrollable: true,
