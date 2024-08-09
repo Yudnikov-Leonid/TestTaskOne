@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test_task_one/core/colors.dart';
 import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
 
@@ -80,7 +81,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                    color: const Color.fromARGB(255, 101, 52, 255),
+                    color: AppColors.mainColor,
                     width: _index == index ? 10 : 3),
                 shape: BoxShape.circle),
           ),

@@ -73,6 +73,9 @@ class _HomePageState extends State<HomePage> {
               appBar: AppBar(
                 title: SearchWidget(
                   controller: _controller,
+                  sortType: state is HomeLoadedState
+                      ? state.sortType
+                      : SortByAlphabet(),
                   sortBottomSheet: SortBottomSheet(
                     bloc: _bloc,
                     index: state is HomeLoadedState ? state.sortType.index : 0,

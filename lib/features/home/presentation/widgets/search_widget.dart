@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:test_task_one/core/colors.dart';
+import 'package:test_task_one/features/home/entities/sort_type.dart';
 import 'package:test_task_one/features/home/presentation/widgets/sort_bottom_sheet.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({required this.controller, required this.sortBottomSheet, super.key});
+  const SearchWidget(
+      {required this.controller,
+      required this.sortType,
+      required this.sortBottomSheet,
+      super.key});
 
   final TextEditingController controller;
+  final SortType sortType;
   final SortBottomSheet sortBottomSheet;
 
   @override
@@ -67,9 +74,11 @@ class _SearchWidgetState extends State<SearchWidget> {
                                   context: context,
                                   builder: (context) => widget.sortBottomSheet);
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.sort,
-                              color: Colors.grey,
+                              color: widget.sortType is SortByBirthday
+                                  ? AppColors.mainColor
+                                  : Colors.grey,
                             )),
                       )
                   ],
