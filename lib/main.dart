@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:test_task_one/features/home/presentation/pages/home_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

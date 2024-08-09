@@ -7,6 +7,7 @@ import 'package:test_task_one/features/home/entities/sort_type.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository _repository;
   final HandleError _handleError;
+  SortType _sortType = SortByAlphabet();
 
   HomeBloc(
       {required HomeRepository repository, required HandleError handleError})
@@ -22,8 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.showLoading) emit(HomeLoadingState());
     try {
       final persons = await _repository.getPersons();
-      final sortType = SortByAlphabet();
-      emit(HomeLoadedState(sortType.sort(persons), sortType));
+      emit(HomeLoadedState(_sortType.sort(persons), _sortType));
     } catch (e) {
       emit(HomeFailedState(_handleError(e)));
     }
@@ -33,7 +33,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeChangeSortTypeEvent event, Emitter<HomeState> emit) async {
     try {
       final persons = _repository.getCachedPersons();
-      emit(HomeLoadedState(event.newType.sort(persons), event.newType));
+      _sortType = event.newType;
+      emit(HomeLoadedState(_sortType.sort(persons), _sortType));
     } catch (e) {
       emit(HomeFailedState(_handleError(e)));
     }
@@ -42,8 +43,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _onInitial(HomeInitialEvent event, Emitter<HomeState> emit) async {
     try {
       final persons = await _repository.getPersons();
-      final sortType = SortByAlphabet();
-      emit(HomeLoadedState(sortType.sort(persons), sortType));
+      emit(HomeLoadedState(_sortType.sort(persons), _sortType));
     } catch (e) {
       emit(HomeFailedState(_handleError(e)));
     }

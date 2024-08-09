@@ -100,7 +100,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   }
 
   void _cancelEditing() {
-    FocusScope.of(context).unfocus();
+    WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
     widget.controller.clear();
     setState(() {
       _editing = false;

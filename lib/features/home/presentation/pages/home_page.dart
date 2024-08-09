@@ -109,9 +109,8 @@ class _HomePageState extends State<HomePage> {
                   final searchText = _searchText.toLowerCase();
                   final searchedList = state.persons
                       .where((e) =>
-                          '${e.firstName} ${e.lastName}'
-                              .toLowerCase()
-                              .startsWith(searchText) ||
+                          e.firstName.toLowerCase().startsWith(searchText) ||
+                          e.lastName.toLowerCase().startsWith(searchText) ||
                           e.userTag.toLowerCase().startsWith(searchText))
                       .toList();
                   return TabBarView(
