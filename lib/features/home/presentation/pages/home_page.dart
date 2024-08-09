@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_task_one/core/conver_departament.dart';
 import 'package:test_task_one/features/home/data/home_repository.dart';
-import 'package:test_task_one/features/home/presentation/home_search_widget.dart';
-import 'package:test_task_one/features/home/presentation/home_bloc.dart';
-import 'package:test_task_one/features/home/presentation/person_widget.dart';
+import 'package:test_task_one/features/home/presentation/widgets/empty_list_widget.dart';
+import 'package:test_task_one/features/home/presentation/widgets/home_search_widget.dart';
+import 'package:test_task_one/features/home/presentation/pages/home_bloc.dart';
+import 'package:test_task_one/features/home/presentation/widgets/person_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -87,16 +88,19 @@ class _HomePageState extends State<HomePage> {
                   final searchText = _searchText.toLowerCase();
                   final searchedList = state.persons
                       .where((e) =>
-                          '${e.firstName} ${e.lastName}'.toLowerCase()
+                          '${e.firstName} ${e.lastName}'
+                              .toLowerCase()
                               .startsWith(searchText) ||
                           e.userTag.toLowerCase().startsWith(searchText))
                       .toList();
                   return TabBarView(
                       children: <Widget>[
-                            ListView.builder(
-                                itemCount: searchedList.length,
-                                itemBuilder: (context, i) =>
-                                    PersonWidget(person: searchedList[i]))
+                            searchedList.isEmpty
+                                ? const EmptyListWidget()
+                                : ListView.builder(
+                                    itemCount: searchedList.length,
+                                    itemBuilder: (context, i) =>
+                                        PersonWidget(person: searchedList[i]))
                           ] +
                           _pages.sublist(1).map((cat) {
                             final newList = searchedList
@@ -104,6 +108,9 @@ class _HomePageState extends State<HomePage> {
                                     per.department ==
                                     ConvertDepartment.categoryToDepartment(cat))
                                 .toList();
+                            if (newList.isEmpty) {
+                              return const EmptyListWidget();
+                            }
                             return ListView.builder(
                                 itemCount: newList.length,
                                 itemBuilder: (context, i) =>
